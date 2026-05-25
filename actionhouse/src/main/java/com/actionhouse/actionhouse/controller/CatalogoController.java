@@ -7,7 +7,7 @@ import com.actionhouse.actionhouse.repository.MensajeRepository;
 import com.actionhouse.actionhouse.repository.ObjetoRepository;
 import com.actionhouse.actionhouse.repository.OfertaRepository;
 import com.actionhouse.actionhouse.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Value;
+import com.actionhouse.actionhouse.service.CloudinaryService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,9 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.*;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class CatalogoController {
@@ -28,18 +26,18 @@ public class CatalogoController {
     private final UsuarioRepository usuarioRepo;
     private final OfertaRepository ofertaRepo;
     private final MensajeRepository mensajeRepo;
-
-    @Value("${app.upload.dir}")
-    private String uploadDir;
+    private final CloudinaryService cloudinaryService;
 
     public CatalogoController(ObjetoRepository objetoRepo,
                               UsuarioRepository usuarioRepo,
                               OfertaRepository ofertaRepo,
-                              MensajeRepository mensajeRepo) {
+                              MensajeRepository mensajeRepo,
+                              CloudinaryService cloudinaryService) {
         this.objetoRepo = objetoRepo;
         this.usuarioRepo = usuarioRepo;
         this.ofertaRepo = ofertaRepo;
         this.mensajeRepo = mensajeRepo;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping("/catalogo")
@@ -116,18 +114,10 @@ public class CatalogoController {
                 .findByEmail(userDetails.getUsername()).orElse(null);
         if (usuario == null) return "redirect:/login";
 
+        // Subir imagen a Cloudinary
         String imagenUrl = null;
         if (imagen != null && !imagen.isEmpty()) {
-            String extension = imagen.getOriginalFilename()
-                    .substring(imagen.getOriginalFilename().lastIndexOf("."));
-            String nombreArchivo = UUID.randomUUID() + extension;
-            Path uploadPath = Paths.get(
-                    System.getProperty("user.dir"), "uploads");
-            Files.createDirectories(uploadPath);
-            Files.copy(imagen.getInputStream(),
-                    uploadPath.resolve(nombreArchivo),
-                    StandardCopyOption.REPLACE_EXISTING);
-            imagenUrl = "/img/uploads/" + nombreArchivo;
+            imagenUrl = cloudinaryService.upload(imagen);
         }
 
         Objeto obj = new Objeto();
@@ -161,18 +151,10 @@ public class CatalogoController {
                 .findByEmail(userDetails.getUsername()).orElse(null);
         if (usuario != null) {
             objetoRepo.findById(id).ifPresent(obj -> {
+                // Borrar imagen de Cloudinary
                 if (obj.getImagenUrl() != null &&
                         obj.getIdUsuario() == usuario.getId()) {
-                    try {
-                        String filename = obj.getImagenUrl()
-                                .replace("/img/uploads/", "");
-                        Path imgPath = Paths.get(
-                                System.getProperty("user.dir"),
-                                "uploads", filename);
-                        Files.deleteIfExists(imgPath);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    cloudinaryService.delete(obj.getImagenUrl());
                 }
             });
             objetoRepo.deleteById(id, usuario.getId());
