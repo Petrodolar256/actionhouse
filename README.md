@@ -185,4 +185,4 @@ La plataforma cumple **WCAG 2.1 nivel AA**:
 
 ## 📄 Licencia
 
-Proyecto académico — Programación Web 2025-2026
+Proyecto académico — Programación Web 2026-1
