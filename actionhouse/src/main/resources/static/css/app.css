@@ -337,3 +337,114 @@ button.nav-logout:hover { color: white; }
 .skip-link:focus {
     top: 1rem;
 }
+/* =====================
+   RESPONSIVE MÓVIL
+   ===================== */
+@media (max-width: 768px) {
+
+    /* NAVBAR */
+    .navbar {
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        padding: 0.8rem 1rem;
+    }
+
+    .nav-logo { font-size: 1.3rem; }
+
+    nav {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        justify-content: flex-start;
+    }
+
+    .btn-publicar {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.9rem;
+    }
+
+    .nav-link, .nav-logout, button.nav-logout {
+        font-size: 0.82rem;
+    }
+
+    /* CONTAINER */
+    .container { padding: 1rem 0.75rem; }
+
+    /* HERO */
+    .hero h1 { font-size: 1.4rem; }
+    .hero p { font-size: 0.9rem; }
+
+    /* GRID CARDS */
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* FILTROS */
+    .filtros { gap: 0.5rem; }
+    .filtro-btn { font-size: 0.82rem; padding: 0.4rem 0.9rem; }
+
+    /* DETALLE */
+    .detalle-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detalle-img-wrapper { min-height: 220px; }
+    .detalle-info { padding: 1.2rem; }
+    .detalle-info h1 { font-size: 1.2rem; }
+
+    /* MIS OBJETOS */
+    .objeto-row {
+        grid-template-columns: 60px 1fr;
+        gap: 0.8rem;
+    }
+
+    .objeto-row-acciones {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .btn-accion-sm { flex: 1; min-width: 80px; }
+
+    /* FORM PAGE */
+    .form-page { padding: 1rem 0; }
+    .main-form { padding: 1.2rem; }
+
+    /* TIPO SELECTOR */
+    .tipo-selector { grid-template-columns: 1fr 1fr; }
+
+    /* PERFIL */
+    .perfil-card { flex-direction: column; text-align: center; }
+    .perfil-avatar { margin: 0 auto; }
+
+    /* CHATS LISTA */
+    .chat-preview {
+        grid-template-columns: 40px 1fr auto;
+        gap: 0.6rem;
+        padding: 0.8rem;
+    }
+
+    .chat-preview-avatar { font-size: 1.4rem; }
+}
+
+@media (max-width: 480px) {
+    /* NAVBAR muy pequeño */
+    .nav-logo { font-size: 1.1rem; }
+
+    nav {
+        gap: 0.4rem;
+    }
+
+    .nav-link { font-size: 0.78rem; }
+
+    /* CARDS */
+    .card-title { font-size: 0.95rem; }
+    .card-desc { font-size: 0.82rem; }
+
+    /* TIPO SELECTOR en columna */
+    .tipo-selector { grid-template-columns: 1fr; }
+
+    /* EMPTY STATE */
+    .empty-state p { font-size: 1rem; }
+}
