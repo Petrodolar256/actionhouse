@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis chats – ActionHouse</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+    <link rel="stylesheet" th:href="@{/css/accessibility.css}">
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">
+    Saltar al contenido principal
+</a>
+<header class="navbar" role="banner">
+    <a href="/catalogo" class="nav-logo">Action<span>House</span></a>
+    <nav role="navigation" aria-label="Navegación principal">
+        <a th:href="@{/publicar}" class="btn-publicar">+ Publicar objeto</a>
+        <a th:href="@{/mis-objetos}" class="nav-link">Mis objetos</a>
+        <a th:href="@{/mis-chats}" class="nav-link activo nav-chats">
+            💬 Chats
+            <span th:if="${noLeidos > 0}"
+                  class="badge-notif"
+                  th:text="${noLeidos}"></span>
+        </a>
+        <a th:href="@{/perfil}" class="nav-link" th:text="${usuario.nombre}"></a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="nav-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="container" id="contenido-principal" role="main">
+    <div class="form-page">
+
+        <div class="form-header">
+            <h1>💬 Mis conversaciones</h1>
+            <p th:if="${noLeidos > 0}"
+               th:text="${noLeidos} + ' mensaje(s) sin leer'">
+            </p>
+        </div>
+
+        <div th:if="${chats.isEmpty()}" class="empty-state">
+            <p>😕 Aún no tienes conversaciones.</p>
+            <a th:href="@{/catalogo}" class="btn-primary">
+                Ver objetos disponibles
+            </a>
+        </div>
+
+        <div class="chats-lista" th:unless="${chats.isEmpty()}">
+            <a th:each="chat : ${chats}"
+               th:href="@{/chat/{obj}/{usr}(
+                   obj=${chat.idObjeto},
+                   usr=${chat.idEmisor == usuario.id ? chat.idReceptor : chat.idEmisor}
+               )}"
+               class="chat-preview">
+
+                <div class="chat-preview-avatar" aria-hidden="true">💬</div>
+
+                <div class="chat-preview-info">
+                    <p class="chat-preview-nombre">
+                        <span th:text="${chat.idEmisor == usuario.id
+                            ? chat.nombreReceptor
+                            : chat.nombreEmisor}">
+                        </span>
+                        <span class="chat-sobre"
+                              th:text="'· ' + ${chat.tituloObjeto}">
+                        </span>
+                    </p>
+                    <p class="chat-preview-msg"
+                       th:text="${(chat.idEmisor == usuario.id ? 'Tú: ' : '') + chat.contenido}">
+                    </p>
+                </div>
+
+                <div class="chat-preview-meta">
+                    <span class="chat-preview-hora"
+                          th:text="${#temporals.format(chat.fecha, 'HH:mm')}">
+                    </span>
+                    <span th:if="${!chat.leido && chat.idReceptor == usuario.id}"
+                          class="badge-notif">•</span>
+                </div>
+
+            </a>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>

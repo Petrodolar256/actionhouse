@@ -1,0 +1,136 @@
+/* =====================
+   SKIP LINK
+   ===================== */
+.skip-link {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 1rem !important;
+    width: auto !important;
+    height: auto !important;
+    clip: auto !important;
+    white-space: normal !important;
+    margin: 0 !important;
+    padding: 0.75rem 1.5rem !important;
+    background: #1a1a2e;
+    color: white !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 8px;
+    outline: 3px solid #e94560;
+    outline-offset: 2px;
+    z-index: 9999 !important;
+}
+
+/* =====================
+   FOCUS VISIBLE GLOBAL
+   ===================== */
+*:focus-visible {
+    outline: 3px solid #e94560;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid #e94560;
+    outline-offset: 3px;
+}
+
+/* =====================
+   CONTRASTE MEJORADO
+   ===================== */
+
+/* Rojo principal — más oscuro para pasar WCAG AA (4.5:1) */
+:root {
+    --color-primary: #c1272d;
+    --color-primary-hover: #9e1f23;
+    --color-dark: #1a1a2e;
+    --color-success: #1a7a3c;
+    --color-error: #9b1c1c;
+}
+
+/* =====================
+   TEXTOS DE ERROR
+   ===================== */
+.alert-error {
+    background: #fdecea;
+    color: #9b1c1c;
+    border-left: 4px solid #9b1c1c;
+}
+
+.alert-success {
+    background: #eafaf1;
+    color: #1a7a3c;
+    border-left: 4px solid #1a7a3c;
+}
+
+/* =====================
+   FORMULARIOS ACCESIBLES
+   ===================== */
+.form-group input:invalid:not(:placeholder-shown),
+.form-group textarea:invalid:not(:placeholder-shown) {
+    border-color: #9b1c1c;
+}
+
+.field-error {
+    color: #9b1c1c;
+    font-size: 0.82rem;
+    margin-top: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* =====================
+   ARIA-CURRENT EN NAV
+   ===================== */
+.nav-link[aria-current="page"] {
+    color: white;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* =====================
+   IMÁGENES SIN ALT
+   ===================== */
+img:not([alt]) {
+    outline: 3px solid red;
+}
+
+/* =====================
+   REDUCIR MOVIMIENTO
+   ===================== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* =====================
+   MODO ALTO CONTRASTE
+   ===================== */
+@media (forced-colors: active) {
+    .btn-primary,
+    .btn-publicar,
+    .btn-submit,
+    .btn-accion {
+        border: 2px solid ButtonText;
+    }
+}

@@ -1,0 +1,323 @@
+/* CHAT LAYOUT */
+.chat-layout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.chat-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+    background: white;
+}
+
+.chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.8rem;
+}
+
+.chat-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e94560;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.chat-header-info h1 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.chat-header-info p {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* MENSAJES */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background: #f0f2f5;
+}
+
+.chat-empty {
+    text-align: center;
+    color: #aaa;
+    margin: auto;
+    font-size: 1rem;
+}
+
+.msg-wrapper {
+    display: flex;
+}
+
+.msg-mio { justify-content: flex-end; }
+.msg-suyo { justify-content: flex-start; }
+
+.msg-burbuja {
+    max-width: 70%;
+    padding: 0.7rem 1rem;
+    border-radius: 16px;
+    position: relative;
+}
+
+.msg-mio .msg-burbuja {
+    background: #e94560;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.msg-suyo .msg-burbuja {
+    background: white;
+    color: #1a1a2e;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.msg-burbuja p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.msg-hora {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    display: block;
+    margin-top: 0.3rem;
+    text-align: right;
+}
+
+/* INPUT */
+.chat-input-area {
+    padding: 1rem 1.5rem;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.chat-form {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.chat-form input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.chat-form input:focus { border-color: #e94560; }
+
+.chat-form button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e94560;
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.chat-form button:hover { background: #c73652; }
+
+/* LISTA DE CHATS */
+.chats-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.chat-preview {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    background: white;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s;
+}
+
+.chat-preview:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+.chat-preview-avatar {
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.chat-preview-nombre {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+}
+
+.chat-preview-msg {
+    font-size: 0.85rem;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-preview-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+}
+
+.chat-preview-hora {
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+/* NOTIFICACIONES */
+.badge-notif {
+    background: #e94560;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.nav-chats { position: relative; }
+
+/* ACCESIBILIDAD */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+/* EXTRAS DETALLE */
+.lista-ofertas-dueno {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.lista-ofertas-dueno h3 {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 0.3rem;
+}
+
+.oferta-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.oferta-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.oferta-item-acciones {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.badge-ganadora {
+    background: #eafaf1;
+    color: #27ae60;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+}
+
+.ya-oferto {
+    color: #27ae60;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+}
+
+.sin-ofertas {
+    color: #999;
+    text-align: center;
+    padding: 1rem;
+}
+
+.btn-entregar-full {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.estado-final {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #555;
+    padding: 1rem;
+}
+.chat-sobre {
+    color: #aaa;
+    font-size: 0.82rem;
+    font-weight: 400;
+    margin-left: 0.3rem;
+}
+/* SKIP LINK */
+.skip-link {
+    position: fixed;
+    top: -60px;
+    left: 1rem;
+    z-index: 9999;
+    background: #1a1a2e;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    outline: 3px solid #e94560;
+    transition: top 0.2s;
+}
+
+.skip-link:focus {
+    top: 1rem;
+}

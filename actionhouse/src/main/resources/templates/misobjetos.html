@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActionHouse – Mis objetos</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/accessibility.css}">
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">
+    Saltar al contenido principal
+</a>
+<header class="navbar" role="banner">
+    <a href="/catalogo" class="nav-logo">Action<span>House</span></a>
+    <nav role="navigation" aria-label="Navegación principal">
+        <a th:href="@{/publicar}" class="btn-publicar">+ Publicar objeto</a>
+        <a th:href="@{/mis-objetos}" class="nav-link">Mis objetos</a>
+        <a th:href="@{/mis-chats}" class="nav-link nav-chats">💬 Chats</a>
+        <a th:href="@{/perfil}" class="nav-link" th:text="${usuario.nombre}"></a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="nav-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="container" id="contenido-principal" role="main">
+
+    <div class="form-header">
+        <h1>Mis objetos publicados</h1>
+        <p>Gestiona los objetos que has publicado en ActionHouse</p>
+    </div>
+
+    <div th:if="${objetos.isEmpty()}" class="empty-state">
+        <p>😕 Aún no has publicado ningún objeto.</p>
+        <a th:href="@{/publicar}" class="btn-primary">Publicar mi primer objeto</a>
+    </div>
+
+    <div class="mis-objetos-lista" th:unless="${objetos.isEmpty()}">
+        <article class="objeto-row" th:each="obj : ${objetos}">
+
+            <div class="objeto-row-img">
+                <img th:if="${obj.imagenUrl != null}"
+                     th:src="${obj.imagenUrl}"
+                     th:alt="${obj.titulo}">
+                <div th:unless="${obj.imagenUrl != null}"
+                     class="placeholder-sm" aria-hidden="true">📦</div>
+            </div>
+
+            <div class="objeto-row-info">
+                <h2 th:text="${obj.titulo}"></h2>
+                <div class="objeto-row-meta">
+                    <span class="badge"
+                          th:classappend="${obj.tipo == 'donacion'} ? 'badge-donacion' : 'badge-subasta'"
+                          th:text="${obj.tipo == 'donacion'} ? '🎁 Donación' : '🔨 Subasta'">
+                    </span>
+                    <span class="estado-badge"
+                          th:classappend="'estado-' + ${obj.estado}"
+                          th:text="${obj.estado}">
+                    </span>
+                </div>
+                <p class="card-desc" th:text="${obj.descripcion}"></p>
+            </div>
+
+            <div class="objeto-row-acciones">
+                <a th:href="@{/objeto/{id}(id=${obj.id})}"
+                   class="btn-accion-sm btn-ver">Ver</a>
+
+                <form th:if="${obj.estado == 'disponible'}"
+                      th:action="@{/objeto/{id}/entregar(id=${obj.id})}"
+                      method="post"
+                      onsubmit="return confirm('¿Marcar como entregado?')">
+                    <button type="submit" class="btn-accion-sm btn-entregar">
+                        ✅ Entregado
+                    </button>
+                </form>
+
+                <form th:action="@{/objeto/{id}/eliminar(id=${obj.id})}"
+                      method="post"
+                      onsubmit="return confirm('¿Eliminar este objeto? Esta acción no se puede deshacer.')">
+                    <button type="submit" class="btn-accion-sm btn-eliminar">
+                        🗑️ Eliminar
+                    </button>
+                </form>
+            </div>
+
+        </article>
+    </div>
+
+</main>
+
+</body>
+</html>

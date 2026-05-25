@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActionHouse – Mi perfil</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/accessibility.css}">
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">
+    Saltar al contenido principal
+</a>
+<header class="navbar" role="banner">
+    <a href="/catalogo" class="nav-logo">Action<span>House</span></a>
+    <nav>
+        <a th:href="@{/publicar}" class="btn-publicar">+ Publicar objeto</a>
+        <a th:href="@{/mis-objetos}" class="nav-link">Mis objetos</a>
+        <a th:href="@{/perfil}" class="nav-link activo" th:text="${usuario.nombre}"></a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="nav-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="container" id="contenido-principal" role="main">
+    <div class="form-page">
+
+        <div class="form-header">
+            <a th:href="@{/catalogo}" class="back-link">← Volver al catálogo</a>
+            <h1>Mi perfil</h1>
+        </div>
+
+        <!-- Mensaje actualizado -->
+        <div th:if="${param.actualizado}" class="alert alert-success" role="alert">
+            ✅ Nombre actualizado correctamente
+        </div>
+        <div th:if="${errorNombre}" class="alert alert-error" role="alert">
+            ⚠️ <span th:text="${errorNombre}"></span>
+        </div>
+
+        <!-- Datos de la cuenta -->
+        <div class="perfil-card">
+            <div class="perfil-avatar" aria-hidden="true">
+                <span th:text="${#strings.substring(usuario.nombre, 0, 1).toUpperCase()}"></span>
+            </div>
+            <div class="perfil-info">
+                <p class="perfil-email" th:text="${usuario.email}"></p>
+                <p class="perfil-rol" th:text="'Rol: ' + ${usuario.rol}"></p>
+            </div>
+        </div>
+
+        <!-- Cambiar nombre -->
+        <div class="main-form" style="margin-top: 1.5rem">
+            <h2 style="margin-bottom:1rem; font-size:1.1rem">Cambiar nombre</h2>
+            <form th:action="@{/perfil/nombre}" method="post">
+                <div class="form-group">
+                    <label for="nombre">Nuevo nombre</label>
+                    <input type="text"
+                           id="nombre"
+                           name="nombre"
+                           th:value="${usuario.nombre}"
+                           required
+                           minlength="2"
+                           maxlength="100">
+                </div>
+                <button type="submit" class="btn-submit">
+                    Guardar cambios
+                </button>
+            </form>
+        </div>
+
+        <!-- Zona peligrosa -->
+        <div class="zona-peligrosa">
+            <h2>⚠️ Zona peligrosa</h2>
+            <p>Al eliminar tu cuenta se borrarán todos tus objetos y ofertas.
+                Esta acción <strong>no se puede deshacer</strong>.</p>
+            <form th:action="@{/perfil/eliminar}"
+                  method="post"
+                  onsubmit="return confirm('¿Estás seguro? Se eliminará tu cuenta y todos tus datos.')">
+                <button type="submit" class="btn-eliminar-cuenta">
+                    🗑️ Eliminar mi cuenta
+                </button>
+            </form>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat – ActionHouse</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+    <link rel="stylesheet" th:href="@{/css/accessibility.css}">
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">
+    Saltar al contenido principal
+</a>
+<header class="navbar" role="banner">
+    <a href="/catalogo" class="nav-logo">Action<span>House</span></a>
+    <nav>
+        <a th:href="@{/mis-chats}" class="nav-link">💬 Mis chats</a>
+        <a th:href="@{/perfil}" class="nav-link" th:text="${yo.nombre}"></a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="nav-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="chat-layout" id="contenido-principal" role="main">
+
+    <!-- Header del chat -->
+    <div class="chat-header">
+        <a th:href="@{/objeto/{id}(id=${objeto.id})}" class="back-link">
+            ← Volver al objeto
+        </a>
+        <div class="chat-header-info">
+            <div class="chat-avatar" aria-hidden="true"
+                 th:text="${#strings.substring(otro.nombre,0,1).toUpperCase()}">
+            </div>
+            <div>
+                <h1 th:text="${otro.nombre}"></h1>
+                <p th:text="'Sobre: ' + ${objeto.titulo}"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div class="chat-messages" id="mensajes" role="log" aria-live="polite">
+
+        <div th:if="${mensajes.isEmpty()}" class="chat-empty">
+            👋 Inicia la conversación sobre este objeto
+        </div>
+
+        <div th:each="msg : ${mensajes}"
+             class="msg-wrapper"
+             th:classappend="${msg.idEmisor == yo.id} ? 'msg-mio' : 'msg-suyo'">
+            <div class="msg-burbuja">
+                <p th:text="${msg.contenido}"></p>
+                <span class="msg-hora"
+                      th:text="${#temporals.format(msg.fecha, 'HH:mm')}">
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Input mensaje -->
+    <div class="chat-input-area">
+        <form th:action="@{/chat/{obj}/{usr}(obj=${objeto.id},usr=${otro.id})}"
+              method="post"
+              class="chat-form">
+            <label for="contenido" class="sr-only">Escribe un mensaje</label>
+            <input type="text"
+                   id="contenido"
+                   name="contenido"
+                   placeholder="Escribe un mensaje..."
+                   maxlength="500"
+                   required
+                   autocomplete="off"
+                   aria-label="Escribe un mensaje">
+            <button type="submit" aria-label="Enviar mensaje">
+                ➤
+            </button>
+        </form>
+    </div>
+
+</main>
+
+<script>
+    // Auto-scroll al último mensaje
+    const mensajes = document.getElementById('mensajes');
+    if (mensajes) mensajes.scrollTop = mensajes.scrollHeight;
+</script>
+
+</body>
+</html>

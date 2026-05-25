@@ -1,0 +1,314 @@
+.form-page, .detalle-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.form-header, .back-link { margin-bottom: 1.5rem; }
+
+.back-link {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.back-link:hover { color: #e94560; }
+
+.form-header h1 { font-size: 1.8rem; font-weight: 800; }
+.form-header p { color: #666; margin-top: 0.4rem; }
+
+.main-form {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.4rem;
+}
+
+.form-group label { font-weight: 600; font-size: 0.9rem; }
+
+.form-group input,
+.form-group textarea {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus { border-color: #e94560; }
+
+.tipo-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.tipo-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tipo-card:has(input:checked) {
+    border-color: #e94560;
+    background: #fff5f7;
+}
+
+.tipo-card input { display: none; }
+
+.tipo-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    text-align: center;
+}
+
+.tipo-icon { font-size: 2rem; }
+.tipo-label { font-weight: 700; }
+.tipo-desc { font-size: 0.8rem; color: #777; }
+
+.btn-submit {
+    width: 100%;
+    padding: 0.9rem;
+    background: #e94560;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-submit:hover { background: #c73652; }
+.btn-submit:focus { outline: 3px solid #1a1a2e; outline-offset: 2px; }
+
+/* DETALLE */
+.detalle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.detalle-img-wrapper { background: #f5f5f5; min-height: 300px; }
+
+.detalle-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detalle-img-placeholder {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+}
+
+.detalle-info {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.detalle-info h1 { font-size: 1.5rem; font-weight: 800; }
+.detalle-desc { color: #555; line-height: 1.6; }
+.detalle-meta { color: #888; font-size: 0.9rem; }
+
+.accion-box {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-top: auto;
+}
+
+.precio-gratis {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #27ae60;
+    margin-bottom: 0.5rem;
+}
+
+.precio-subasta {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.accion-desc { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+
+.btn-accion {
+    display: block;
+    width: 100%;
+    padding: 0.85rem;
+    background: #e94560;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.btn-accion:hover { background: #c73652; }
+
+.propio-aviso {
+    text-align: center;
+    color: #999;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .detalle-grid { grid-template-columns: 1fr; }
+    .tipo-selector { grid-template-columns: 1fr; }
+}
+.mejor-oferta {
+    background: #fff8e1;
+    border: 2px solid #f39c12;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.historial-ofertas {
+    margin-top: 1.2rem;
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+}
+
+.historial-ofertas h3 {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 0.6rem;
+}
+
+.historial-ofertas ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.historial-ofertas li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: #555;
+}
+/* PERFIL */
+.perfil-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.perfil-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #e94560;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.perfil-info { display: flex; flex-direction: column; gap: 0.3rem; }
+.perfil-email { font-weight: 700; color: #333; }
+.perfil-rol { font-size: 0.85rem; color: #999; text-transform: capitalize; }
+
+/* ZONA PELIGROSA */
+.zona-peligrosa {
+    margin-top: 2rem;
+    border: 2px solid #fdecea;
+    border-radius: 16px;
+    padding: 1.5rem;
+    background: #fffafa;
+}
+
+.zona-peligrosa h2 {
+    font-size: 1.1rem;
+    color: #c0392b;
+    margin-bottom: 0.6rem;
+}
+
+.zona-peligrosa p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.btn-eliminar-cuenta {
+    padding: 0.7rem 1.5rem;
+    background: white;
+    color: #c0392b;
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-eliminar-cuenta:hover {
+    background: #e74c3c;
+    color: white;
+}
+/* SKIP LINK */
+.skip-link {
+    position: fixed;
+    top: -60px;
+    left: 1rem;
+    z-index: 9999;
+    background: #1a1a2e;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    outline: 3px solid #e94560;
+    transition: top 0.2s;
+}
+
+.skip-link:focus {
+    top: 1rem;
+}

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${objeto.titulo} + ' – ActionHouse'">Detalle</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/accessibility.css}">
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">
+    Saltar al contenido principal
+</a>
+<header class="navbar" role="banner">
+    <a href="/catalogo" class="nav-logo">Action<span>House</span></a>
+    <nav>
+        <a th:href="@{/publicar}" class="btn-publicar">+ Publicar objeto</a>
+        <a th:href="@{/mis-objetos}" class="nav-link">Mis objetos</a>
+        <a th:href="@{/mis-chats}" class="nav-link nav-chats">
+            💬 Chats
+            <span th:if="${noLeidos > 0}"
+                  class="badge-notif"
+                  th:text="${noLeidos}"></span>
+        </a>
+        <a th:href="@{/perfil}" class="nav-link" th:text="${usuario.nombre}"></a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="nav-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="container" id="contenido-principal" role="main">
+    <div class="detalle-page">
+        <a th:href="@{/catalogo}" class="back-link">← Volver al catálogo</a>
+
+        <div class="detalle-grid">
+
+            <!-- Imagen -->
+            <div class="detalle-img-wrapper">
+                <img th:if="${objeto.imagenUrl != null}"
+                     th:src="${objeto.imagenUrl}"
+                     th:alt="${objeto.titulo}"
+                     class="detalle-img">
+                <div th:unless="${objeto.imagenUrl != null}"
+                     class="detalle-img-placeholder" aria-hidden="true">📦</div>
+            </div>
+
+            <!-- Info -->
+            <div class="detalle-info">
+
+                <span class="badge"
+                      th:classappend="${objeto.tipo == 'donacion'} ? 'badge-donacion' : 'badge-subasta'"
+                      th:text="${objeto.tipo == 'donacion'} ? '🎁 Donación' : '🔨 Subasta'">
+                </span>
+
+                <span class="badge"
+                      th:classappend="'estado-' + ${objeto.estado}"
+                      th:text="${objeto.estado}">
+                </span>
+
+                <h1 th:text="${objeto.titulo}"></h1>
+                <p class="detalle-desc" th:text="${objeto.descripcion}"></p>
+                <p class="detalle-meta">
+                    👤 Publicado por <strong th:text="${objeto.nombreUsuario}"></strong>
+                </p>
+
+                <!-- ===== VISTA PARA EL DUEÑO ===== -->
+                <div th:if="${objeto.idUsuario == usuario.id}" class="accion-box">
+                    <p class="propio-aviso">📦 Este objeto es tuyo</p>
+
+                    <!-- Donación: marcar entregado -->
+                    <div th:if="${objeto.tipo == 'donacion'}">
+                        <form th:if="${objeto.estado == 'disponible'}"
+                              th:action="@{/objeto/{id}/entregar(id=${objeto.id})}"
+                              method="post">
+                            <button type="submit" class="btn-accion btn-entregar-full">
+                                ✅ Marcar como entregado
+                            </button>
+                        </form>
+                        <p th:if="${objeto.estado == 'entregado'}"
+                           class="estado-final">✅ Ya entregado</p>
+                    </div>
+
+                    <!-- Subasta: ver y aceptar ofertas -->
+                    <div th:if="${objeto.tipo == 'subasta'}">
+                        <div th:if="${ofertas.isEmpty()}" class="sin-ofertas">
+                            Aún no hay ofertas
+                        </div>
+
+                        <div th:unless="${ofertas.isEmpty()}" class="lista-ofertas-dueno">
+                            <h3>Ofertas recibidas</h3>
+                            <div class="oferta-item"
+                                 th:each="oferta : ${ofertas}">
+                                <div class="oferta-item-info">
+                                    <span th:text="${oferta.nombreUsuario}"></span>
+                                    <strong th:text="${oferta.monto} + ' €'"></strong>
+                                </div>
+                                <div class="oferta-item-acciones">
+                                    <!-- Chatear con el ofertante -->
+                                    <a th:href="@{/chat/{obj}/{usr}(obj=${objeto.id},usr=${oferta.idUsuario})}"
+                                       class="btn-accion-sm btn-ver">💬 Chatear</a>
+                                    <!-- Aceptar oferta -->
+                                    <form th:if="${objeto.estado == 'disponible' && ofertaAceptada == null}"
+                                          th:action="@{/objeto/{id}/aceptar/{ofId}(id=${objeto.id},ofId=${oferta.id})}"
+                                          method="post"
+                                          onsubmit="return confirm('¿Aceptar esta oferta de ' + /*[[${oferta.monto}]]*/ '' + ' €?')">
+                                        <button type="submit"
+                                                class="btn-accion-sm btn-entregar">
+                                            ✅ Aceptar
+                                        </button>
+                                    </form>
+                                    <span th:if="${oferta.aceptada}"
+                                          class="badge-ganadora">🏆 Aceptada</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form th:if="${objeto.estado == 'reservado'}"
+                              th:action="@{/objeto/{id}/entregar(id=${objeto.id})}"
+                              method="post" style="margin-top:1rem">
+                            <button type="submit" class="btn-accion btn-entregar-full">
+                                ✅ Marcar como entregado
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ===== VISTA PARA INTERESADOS ===== -->
+                <div th:unless="${objeto.idUsuario == usuario.id}" class="accion-box">
+
+                    <!-- Objeto reservado o entregado -->
+                    <div th:if="${objeto.estado != 'disponible'}" class="estado-final">
+                        <span th:if="${objeto.estado == 'reservado'}">🔒 Este objeto ya está reservado</span>
+                        <span th:if="${objeto.estado == 'entregado'}">✅ Este objeto ya fue entregado</span>
+                    </div>
+
+                    <!-- DONACIÓN disponible -->
+                    <div th:if="${objeto.tipo == 'donacion' && objeto.estado == 'disponible'}">
+                        <p class="precio-gratis">Gratis 🎁</p>
+                        <a th:href="@{/chat/{obj}/{usr}(obj=${objeto.id},usr=${objeto.idUsuario})}"
+                           class="btn-accion">
+                            💬 Contactar al dueño
+                        </a>
+                    </div>
+
+                    <!-- SUBASTA disponible -->
+                    <div th:if="${objeto.tipo == 'subasta' && objeto.estado == 'disponible'}">
+
+                        <div th:if="${mejorOferta != null}" class="mejor-oferta">
+                            🏆 Mejor oferta:
+                            <strong th:text="${mejorOferta.monto} + ' €'"></strong>
+                            por <span th:text="${mejorOferta.nombreUsuario}"></span>
+                        </div>
+
+                        <!-- Si ya ofertó → chatear -->
+                        <div th:if="${yaOferto}">
+                            <p class="ya-oferto">✅ Ya has hecho una oferta</p>
+                            <a th:href="@{/chat/{obj}/{usr}(obj=${objeto.id},usr=${objeto.idUsuario})}"
+                               class="btn-accion">
+                                💬 Chatear con el dueño
+                            </a>
+                        </div>
+
+                        <!-- Si no ha ofertado → formulario -->
+                        <form th:unless="${yaOferto}"
+                              th:action="@{/objeto/{id}/ofertar(id=${objeto.id})}"
+                              method="post">
+                            <div class="form-group">
+                                <label for="monto">Tu oferta (€)</label>
+                                <input type="number"
+                                       id="monto"
+                                       name="monto"
+                                       th:min="${objeto.precioInicial}"
+                                       step="0.01"
+                                       placeholder="Introduce tu oferta"
+                                       required>
+                            </div>
+                            <button type="submit" class="btn-accion">
+                                💰 Hacer oferta
+                            </button>
+                        </form>
+
+                        <!-- Historial -->
+                        <div th:if="${!ofertas.isEmpty()}" class="historial-ofertas">
+                            <h3>Historial de ofertas</h3>
+                            <ul>
+                                <li th:each="oferta : ${ofertas}">
+                                    <span th:text="${oferta.nombreUsuario}"></span>
+                                    <strong th:text="${oferta.monto} + ' €'"></strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

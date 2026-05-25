@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActionHouse – Publicar objeto</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/accessibility.css}">
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">
+    Saltar al contenido principal
+</a>
+<header class="navbar" role="banner">
+    <a href="/catalogo" class="nav-logo">Action<span>House</span></a>
+    <nav role="navigation" aria-label="Navegación principal">
+        <a th:href="@{/publicar}" class="btn-publicar">+ Publicar objeto</a>
+        <a th:href="@{/mis-objetos}" class="nav-link">Mis objetos</a>
+        <a th:href="@{/mis-chats}" class="nav-link nav-chats">💬 Chats</a>
+        <a th:href="@{/perfil}" class="nav-link" th:text="${usuario.nombre}"></a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="nav-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="container" id="contenido-principal" role="main">
+    <div class="form-page">
+
+        <div class="form-header">
+            <a th:href="@{/catalogo}" class="back-link">← Volver al catálogo</a>
+            <h1>Publicar un objeto</h1>
+            <p>Comparte algo que ya no necesitas con la comunidad</p>
+        </div>
+
+        <form th:action="@{/publicar}" method="post"
+              enctype="multipart/form-data" class="main-form">
+
+            <div class="form-group">
+                <label for="titulo">Título del objeto *</label>
+                <input type="text"
+                       id="titulo"
+                       name="titulo"
+                       placeholder="Ej: Libro de Cálculo, Laptop Dell..."
+                       required
+                       aria-required="true"
+                       maxlength="150">
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción *</label>
+                <textarea id="descripcion"
+                          name="descripcion"
+                          rows="4"
+                          placeholder="Estado del objeto, características, por qué lo donas..."
+                          required
+                          aria-required="true"
+                          maxlength="1000"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de publicación *</label>
+                <div class="tipo-selector" role="radiogroup"
+                     aria-label="Tipo de publicación">
+
+                    <label class="tipo-card" for="tipo-donacion">
+                        <input type="radio"
+                               id="tipo-donacion"
+                               name="tipo"
+                               value="donacion"
+                               checked
+                               onchange="togglePrecio(this.value)">
+                        <div class="tipo-content">
+                            <span class="tipo-icon">🎁</span>
+                            <span class="tipo-label">Donación</span>
+                            <span class="tipo-desc">Lo regalas gratis</span>
+                        </div>
+                    </label>
+
+                    <label class="tipo-card" for="tipo-subasta">
+                        <input type="radio"
+                               id="tipo-subasta"
+                               name="tipo"
+                               value="subasta"
+                               onchange="togglePrecio(this.value)">
+                        <div class="tipo-content">
+                            <span class="tipo-icon">🔨</span>
+                            <span class="tipo-label">Subasta</span>
+                            <span class="tipo-desc">Precio mínimo de salida</span>
+                        </div>
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="form-group" id="grupo-precio" style="display:none">
+                <label for="precioInicial">Precio inicial (€) *</label>
+                <input type="number"
+                       id="precioInicial"
+                       name="precioInicial"
+                       min="0.01"
+                       step="0.01"
+                       placeholder="0.00"
+                       aria-label="Precio inicial en euros">
+            </div>
+
+            <div class="form-group">
+                <label for="imagen">Imagen del objeto (opcional)</label>
+                <input type="file"
+                       id="imagen"
+                       name="imagen"
+                       accept="image/*"
+                       aria-label="Selecciona una imagen del objeto">
+                <small class="field-hint">JPG, PNG o WEBP — máximo 5MB</small>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                Publicar objeto
+            </button>
+
+        </form>
+    </div>
+</main>
+
+<script>
+    function togglePrecio(tipo) {
+        const grupoPrecio = document.getElementById('grupo-precio');
+        const inputPrecio = document.getElementById('precioInicial');
+        if (tipo === 'subasta') {
+            grupoPrecio.style.display = 'block';
+            inputPrecio.required = true;
+        } else {
+            grupoPrecio.style.display = 'none';
+            inputPrecio.required = false;
+        }
+    }
+</script>
+
+</body>
+</html>

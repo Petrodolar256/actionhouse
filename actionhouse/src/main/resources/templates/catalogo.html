@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActionHouse – Catálogo</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/accessibility.css}">
+</head>
+<body>
+<a href="#contenido-principal" class="skip-link">
+    Saltar al contenido principal
+</a>
+<header class="navbar" role="banner">
+    <a href="/catalogo" class="nav-logo">Action<span>House</span></a>
+    <nav role="navigation" aria-label="Navegación principal">
+        <a th:href="@{/publicar}" class="btn-publicar">+ Publicar objeto</a>
+        <a th:href="@{/mis-objetos}" class="nav-link">Mis objetos</a>
+        <a th:href="@{/mis-chats}" class="nav-link nav-chats">💬 Chats</a>
+        <a th:href="@{/perfil}" class="nav-link" th:text="${usuario.nombre}"></a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="nav-logout">Cerrar sesión</button>
+        </form>
+    </nav>
+</header>
+
+<main class="container" id="contenido-principal" role="main">
+    <section class="hero">
+        <h1>Encuentra tu tesoro 🏺</h1>
+        <p>Objetos donados y en subasta por la comunidad universitaria</p>
+    </section>
+
+    <!-- Filtros -->
+    <div class="filtros" role="group" aria-label="Filtros">
+        <a th:href="@{/catalogo}"
+           th:classappend="${filtroActivo == null} ? 'activo' : ''"
+           class="filtro-btn">Todos</a>
+        <a th:href="@{/catalogo(tipo='donacion')}"
+           th:classappend="${filtroActivo == 'donacion'} ? 'activo' : ''"
+           class="filtro-btn filtro-donacion">🎁 Donaciones</a>
+        <a th:href="@{/catalogo(tipo='subasta')}"
+           th:classappend="${filtroActivo == 'subasta'} ? 'activo' : ''"
+           class="filtro-btn filtro-subasta">🔨 Subastas</a>
+    </div>
+
+    <!-- Grid de objetos -->
+    <div th:if="${objetos.isEmpty()}" class="empty-state">
+        <p>😕 Aún no hay objetos publicados.</p>
+        <a th:href="@{/publicar}" class="btn-primary">¡Sé el primero en publicar!</a>
+    </div>
+
+    <div class="grid" th:unless="${objetos.isEmpty()}">
+        <article class="card" th:each="obj : ${objetos}">
+            <a th:href="@{/objeto/{id}(id=${obj.id})}" class="card-link">
+                <div class="card-img-wrapper">
+                    <img th:if="${obj.imagenUrl != null}"
+                         th:src="${obj.imagenUrl}"
+                         th:alt="${obj.titulo}"
+                         class="card-img">
+                    <div th:unless="${obj.imagenUrl != null}"
+                         class="card-img-placeholder" aria-hidden="true">📦</div>
+                    <span class="badge"
+                          th:classappend="${obj.tipo == 'donacion'} ? 'badge-donacion' : 'badge-subasta'"
+                          th:text="${obj.tipo == 'donacion'} ? '🎁 Donación' : '🔨 Subasta'">
+                    </span>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title" th:text="${obj.titulo}"></h2>
+                    <p class="card-desc" th:text="${obj.descripcion}"></p>
+                    <div class="card-footer">
+                        <span class="card-user" th:text="${obj.nombreUsuario}"></span>
+                        <span class="card-precio"
+                              th:if="${obj.tipo == 'subasta'}"
+                              th:text="'Desde ' + ${obj.precioInicial} + '€'">
+                        </span>
+                        <span class="card-precio"
+                              th:if="${obj.tipo == 'donacion'}">Gratis</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+    </div>
+
+</main>
+
+</body>
+</html>
